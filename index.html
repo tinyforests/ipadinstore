@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (UPDATED thumbs scroll + snap + padding) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (UPDATED: no overlay band, larger image, narrower right panel) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,21 +37,17 @@
     body { font-family: "IBM Plex Sans", sans-serif; }
     h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
 
-    /* iPad / kiosk niceties */
     html, body { height: 100%; }
     body { overscroll-behavior: none; }
     .safe { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
     .no-select { -webkit-user-select: none; user-select: none; }
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
 
-    /* Smooth fades for slide changes */
     .fade { transition: opacity 320ms ease; }
 
-    /* Hide scrollbars for the thumbs row on iPad */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Optional: reduce motion */
     @media (prefers-reduced-motion: reduce) {
       .fade { transition: none !important; }
     }
@@ -86,29 +82,33 @@
     <main class="flex-1">
       <div class="max-w-7xl mx-auto px-8 py-8">
         <!-- Gardens view -->
+        <!-- UPDATED: make image area larger + right panel narrower -->
         <section id="view-gardens" class="grid lg:grid-cols-12 gap-10 items-stretch">
-          <!-- Image panel -->
-          <div class="lg:col-span-7">
-            <div class="relative border border-gardener-green/10 bg-gardener-green/5 overflow-hidden rounded-none">
-              <!-- Image area -->
+          <!-- Left: Image + caption band + thumbs -->
+          <div class="lg:col-span-8">
+            <!-- Image (no text overlay now) -->
+            <div class="border border-gardener-green/10 bg-gardener-green/5 overflow-hidden">
+              <!-- Keep 4:3 for your hero exports -->
               <div id="imagePanel" class="fade opacity-100 w-full aspect-[4/3] bg-gardener-green/10"></div>
+            </div>
 
-              <!-- Overlay label -->
-              <div class="absolute left-0 right-0 bottom-0 px-6 py-5 bg-nostalgic-beige/85 backdrop-blur border-t border-gardener-green/10">
-                <div class="flex items-end justify-between gap-6">
-                  <div>
-                    <div class="text-xs uppercase tracking-[0.18em] opacity-60">Garden</div>
-                    <div id="gardenTitle" class="font-serif text-3xl leading-tight mt-1">Garden One</div>
-                    <div id="gardenSubtitle" class="text-sm opacity-70 mt-2">A calm, layered ecological garden built for long time.</div>
+            <!-- UPDATED: caption band moved UNDER the photo -->
+            <div class="border border-gardener-green/10 border-t-0 bg-nostalgic-beige">
+              <div class="px-6 py-5 flex items-end justify-between gap-6">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">Garden</div>
+                  <div id="gardenTitle" class="font-serif text-3xl leading-tight mt-1">Garden One</div>
+                  <div id="gardenSubtitle" class="text-sm opacity-70 mt-2">
+                    A calm, layered ecological garden built for long time.
                   </div>
-                  <div class="flex gap-3">
-                    <button id="prevBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
-                      ←
-                    </button>
-                    <button id="nextBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
-                      →
-                    </button>
-                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <button id="prevBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                    ←
+                  </button>
+                  <button id="nextBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                    →
+                  </button>
                 </div>
               </div>
             </div>
@@ -117,16 +117,16 @@
             <div class="mt-6">
               <div class="text-xs uppercase tracking-[0.18em] opacity-60 mb-3">Tap a garden</div>
 
-              <!-- UPDATED: added pr-8 so last card isn't clipped, plus snap scrolling -->
+              <!-- keep scroll; padding prevents last one looking clipped; snap makes it feel deliberate -->
               <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2 pr-8 snap-x snap-mandatory"></div>
 
               <div class="text-xs opacity-50 mt-2">Scroll →</div>
             </div>
           </div>
 
-          <!-- Sales / details panel -->
-          <div class="lg:col-span-5">
-            <div class="border border-gardener-green/10 bg-gardener-green/5 p-8 h-full flex flex-col">
+          <!-- Right: Sales / details panel (narrower now) -->
+          <div class="lg:col-span-4">
+            <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 h-full flex flex-col">
               <div class="flex items-start justify-between gap-6">
                 <div>
                   <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
@@ -138,7 +138,7 @@
                 </div>
               </div>
 
-              <div class="mt-8 space-y-6 text-base leading-relaxed">
+              <div class="mt-7 space-y-6 text-base leading-relaxed">
                 <p id="salesLine" class="text-lg">
                   A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.
                 </p>
@@ -161,10 +161,10 @@
                 </div>
               </div>
 
-              <div class="mt-10 pt-8 border-t border-gardener-green/10">
+              <div class="mt-9 pt-7 border-t border-gardener-green/10">
                 <div class="flex flex-col gap-4">
                   <div class="text-xs uppercase tracking-[0.18em] opacity-60">Next step</div>
-                  <div class="flex gap-4">
+                  <div class="flex gap-4 flex-wrap">
                     <a href="mailto:hello@gardenerandson.com.au?subject=Garden%20consultation%20request" class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
                       Book a consult
                     </a>
@@ -184,7 +184,7 @@
         <!-- Why ecological view -->
         <section id="view-how" class="hidden">
           <div class="grid lg:grid-cols-12 gap-10">
-            <div class="lg:col-span-7">
+            <div class="lg:col-span-8">
               <div class="border border-gardener-green/10 bg-gardener-green/5 p-10">
                 <div class="text-xs uppercase tracking-[0.18em] opacity-60">Why ecological gardens</div>
                 <h2 class="font-serif text-5xl leading-[1.02] mt-3">
@@ -235,7 +235,7 @@
               </div>
             </div>
 
-            <div class="lg:col-span-5">
+            <div class="lg:col-span-4">
               <div class="border border-gardener-green/10 bg-gardener-green/5 p-10 h-full">
                 <div class="text-xs uppercase tracking-[0.18em] opacity-60">In-store script</div>
                 <h3 class="font-serif text-4xl leading-[1.05] mt-3">A simple way to say it.</h3>
@@ -260,7 +260,6 @@
                     If you have a booking form, replace the email buttons with that URL and place a QR code on screen.
                   </p>
 
-                  <!-- Optional QR placeholder -->
                   <div class="mt-6 border border-gardener-green/10 bg-gardener-green/10 aspect-square w-48"></div>
                   <div class="text-xs opacity-60 mt-3">QR placeholder (replace with an &lt;img&gt;)</div>
                 </div>
@@ -289,7 +288,6 @@
     // =========================
     // DATA — Replace image paths
     // =========================
-    // Put your images in: /img/garden-01.jpg ... garden-06.jpg (or adjust the paths below).
     const GARDENS = [
       {
         title: "Garden One",
@@ -402,7 +400,6 @@
         b.classList.toggle("text-gardener-green", !isActive);
       });
 
-      // UPDATED: ensure active thumb is fully visible + centered in the scroll row
       const active = thumbRow.querySelector(`button[data-index="${index}"]`);
       if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
@@ -441,13 +438,8 @@
       setActiveThumb(index);
     }
 
-    function next() {
-      render((current + 1) % GARDENS.length);
-    }
-
-    function prev() {
-      render((current - 1 + GARDENS.length) % GARDENS.length);
-    }
+    function next() { render((current + 1) % GARDENS.length); }
+    function prev() { render((current - 1 + GARDENS.length) % GARDENS.length); }
 
     function startAutoplay() {
       stopAutoplay();
@@ -485,22 +477,17 @@
     document.addEventListener("DOMContentLoaded", () => {
       yearEl.textContent = new Date().getFullYear();
 
-      // Build thumbs
+      // Thumbs
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
-
-        // UPDATED: added snap-start (pairs with snap-x on the container)
         b.className =
           "no-select snap-start shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
-
         b.innerHTML = `<div class="font-medium leading-tight">${g.title}</div><div class="text-xs opacity-70">Tap to view</div>`;
-
         b.addEventListener("click", () => {
           render(i);
           if (autoplay) startAutoplay();
         });
-
         thumbRow.appendChild(b);
       });
 
@@ -517,7 +504,7 @@
       btnHow.addEventListener("click", showHow);
       if (btnBackToGardens) btnBackToGardens.addEventListener("click", showGardens);
 
-      // Quick pitch button — swaps the line for a concise script (and back)
+      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
@@ -544,8 +531,7 @@
       let startY = 0;
       let tracking = false;
 
-      const swipeTarget = document.body;
-      swipeTarget.addEventListener("touchstart", (e) => {
+      document.body.addEventListener("touchstart", (e) => {
         if (viewGardens.classList.contains("hidden")) return;
         if (!e.touches || e.touches.length !== 1) return;
         tracking = true;
@@ -553,7 +539,7 @@
         startY = e.touches[0].clientY;
       }, { passive: true });
 
-      swipeTarget.addEventListener("touchend", (e) => {
+      document.body.addEventListener("touchend", (e) => {
         if (!tracking) return;
         tracking = false;
 
@@ -571,16 +557,5 @@
       }, { passive: true });
     });
   </script>
-
-  <!--
-    HOW TO USE
-    ----------
-    1) Put this file on your site or open it locally on the iPad (Files app → Safari).
-    2) Create an /img/ folder next to this HTML and add:
-       garden-01.jpg ... garden-06.jpg
-       (or update the paths in the GARDENS array)
-    3) Optional: replace mailto buttons with a booking form URL.
-    4) iPad kiosk tip: use Guided Access (Settings → Accessibility → Guided Access).
-  -->
 </body>
 </html>
