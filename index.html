@@ -55,9 +55,8 @@
 
 <body class="bg-nostalgic-beige text-gardener-green safe">
   <!-- Full-screen kiosk frame -->
-  <!-- UPDATED: add a small top gap using pt-4 (and keep the rest fitting) -->
   <div class="h-[100dvh] w-full flex flex-col pt-4">
-    <main class="flex-1">
+    <main class="flex-1 min-h-0">
       <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
         <section id="view-gardens" class="grid lg:grid-cols-12 gap-8 h-full">
           <!-- Left -->
@@ -93,13 +92,13 @@
 
           <!-- Right -->
           <div class="lg:col-span-4 flex flex-col min-h-0">
-            <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0">
+            <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0 overflow-y-auto hide-scrollbar">
               <div>
                 <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
                 <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
               </div>
 
-              <div class="mt-6 space-y-6 text-base leading-relaxed min-h-0">
+              <div class="mt-6 space-y-6 text-base leading-relaxed">
                 <p id="salesLine" class="text-lg">
                   A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.
                 </p>
@@ -163,7 +162,7 @@
         salesLine: "Proof that even small gardens can restore habitat and create daily calm.",
         designedFor: ["Compact courtyard / narrow sites", "Entertaining + circulation", "Privacy + green enclosure"],
         builtWith: ["Vertical + mid-layer planting", "Microclimate pockets", "Permeable surfaces where possible"],
-        resultsOverTime: ["Cooler outdoor feel", "More pollinators", "A stronger sense of ‘place’"]
+        resultsOverTime: ["Cooler outdoor feel", "More pollinators", "A stronger sense of 'place'"]
       },
       { title: "Garden Four", subtitle: "A canopy-forward garden: shade, comfort, and long time.", image: "img/garden-04.jpg",
         salesLine: "Canopy and understorey working together — shade above, habitat below.",
@@ -298,7 +297,7 @@
           return;
         }
         salesLine.textContent =
-          "“This is an ecological garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. Soil, water, canopy, and habitat start working together, so the garden becomes calmer and richer each season.”";
+          ""This is an ecological garden — designed to thrive in real conditions. It's layered, tuned to the site, and built to mature into depth. Soil, water, canopy, and habitat start working together, so the garden becomes calmer and richer each season."";
         btnScript.textContent = "Back";
       });
 
