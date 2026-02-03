@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK FIT: no vertical scroll, no header, simplified labels) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK FIT + top gap) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,44 +39,32 @@
 
     /* Kiosk / iPad fit */
     html, body { height: 100%; }
-    body { overscroll-behavior: none; }
+    body { overscroll-behavior: none; overflow: hidden; }
     .safe { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
     .no-select { -webkit-user-select: none; user-select: none; }
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
 
-    /* Prevent vertical scrolling entirely */
-    body { overflow: hidden; }
-
-    /* Smooth fades for slide changes */
     .fade { transition: opacity 320ms ease; }
 
-    /* Hide scrollbar for thumbs (keep horizontal scroll) */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .fade { transition: none !important; }
-    }
+    @media (prefers-reduced-motion: reduce) { .fade { transition: none !important; } }
   </style>
 </head>
 
 <body class="bg-nostalgic-beige text-gardener-green safe">
   <!-- Full-screen kiosk frame -->
-  <div class="h-[100dvh] w-full flex flex-col">
-    <!-- Main content (fills screen) -->
+  <!-- UPDATED: add a small top gap using pt-4 (and keep the rest fitting) -->
+  <div class="h-[100dvh] w-full flex flex-col pt-4">
     <main class="flex-1">
-      <!-- Tighter padding + no footer so everything fits -->
-      <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 h-full">
-        <!-- Two-panel layout locked to available height -->
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
         <section id="view-gardens" class="grid lg:grid-cols-12 gap-8 h-full">
-          <!-- Left: image + caption band + thumbs -->
+          <!-- Left -->
           <div class="lg:col-span-8 flex flex-col min-h-0">
-            <!-- Image + caption as a single block -->
             <div class="border border-gardener-green/10 bg-gardener-green/5 overflow-hidden flex flex-col">
-              <!-- Image (4:3) -->
               <div id="imagePanel" class="fade opacity-100 w-full aspect-[4/3] bg-gardener-green/10"></div>
 
-              <!-- Caption band under photo -->
               <div class="border-t border-gardener-green/10 bg-nostalgic-beige">
                 <div class="px-5 py-4 flex items-end justify-between gap-6">
                   <div class="min-w-0">
@@ -98,22 +86,17 @@
               </div>
             </div>
 
-            <!-- Thumbs (horizontal scroll) -->
             <div class="mt-4 min-h-0">
-              <!-- Removed "Tap a garden" and "Scroll →" text -->
               <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2 pr-8 snap-x snap-mandatory"></div>
             </div>
           </div>
 
-          <!-- Right: Sales / details panel (narrow) -->
+          <!-- Right -->
           <div class="lg:col-span-4 flex flex-col min-h-0">
             <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0">
-              <div class="flex items-start justify-between gap-6">
-                <div>
-                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
-                  <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
-                </div>
-                <!-- Removed “Swipe left/right or use arrows…” -->
+              <div>
+                <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
+                <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
               </div>
 
               <div class="mt-6 space-y-6 text-base leading-relaxed min-h-0">
@@ -153,7 +136,6 @@
               </div>
             </div>
 
-            <!-- Tiny unobtrusive brand line (optional). Remove if you want 100% blank. -->
             <div class="mt-3 text-xs opacity-50 select-none">
               Gardener & Son · Melbourne
             </div>
@@ -164,59 +146,38 @@
   </div>
 
   <script>
-    // =========================
-    // DATA — Replace image paths
-    // =========================
     const GARDENS = [
-      {
-        title: "Garden One",
-        subtitle: "A layered ecological garden designed for calm and habitat.",
-        image: "img/garden-01.jpg",
+      { title: "Garden One", subtitle: "A layered ecological garden designed for calm and habitat.", image: "img/garden-01.jpg",
         salesLine: "A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.",
         designedFor: ["Family use + play", "Low-stress maintenance", "Shade + seasonal comfort"],
         builtWith: ["Permeable paths + contour logic", "Indigenous / climate-fit planting", "Habitat logs + layered structure"],
         resultsOverTime: ["Richer soil and mulch ecology", "More birds / insects", "Better water holding and microclimate"]
       },
-      {
-        title: "Garden Two",
-        subtitle: "Designed for beauty under real conditions — sun, wind, and clay.",
-        image: "img/garden-02.jpg",
+      { title: "Garden Two", subtitle: "Designed for beauty under real conditions — sun, wind, and clay.", image: "img/garden-02.jpg",
         salesLine: "Ecological structure first, then beauty — a garden that gets better as it matures.",
         designedFor: ["Full sun exposure", "Hot edges + reflected heat", "Low irrigation reliance"],
         builtWith: ["Drought-tuned species mix", "Layering for density and habitat", "Soil building + mulch strategy"],
         resultsOverTime: ["Stability in heatwaves", "Seasonal colour without fragility", "Less weed pressure over time"]
       },
-      {
-        title: "Garden Three",
-        subtitle: "A small space transformed into living infrastructure.",
-        image: "img/garden-03.jpg",
+      { title: "Garden Three", subtitle: "A small space transformed into living infrastructure.", image: "img/garden-03.jpg",
         salesLine: "Proof that even small gardens can restore habitat and create daily calm.",
         designedFor: ["Compact courtyard / narrow sites", "Entertaining + circulation", "Privacy + green enclosure"],
         builtWith: ["Vertical + mid-layer planting", "Microclimate pockets", "Permeable surfaces where possible"],
         resultsOverTime: ["Cooler outdoor feel", "More pollinators", "A stronger sense of ‘place’"]
       },
-      {
-        title: "Garden Four",
-        subtitle: "A canopy-forward garden: shade, comfort, and long time.",
-        image: "img/garden-04.jpg",
+      { title: "Garden Four", subtitle: "A canopy-forward garden: shade, comfort, and long time.", image: "img/garden-04.jpg",
         salesLine: "Canopy and understorey working together — shade above, habitat below.",
         designedFor: ["Heat mitigation", "Outdoor sitting areas", "Bird life + layered habitat"],
         builtWith: ["Canopy planning + spacing", "Understorey guilds", "Soil/compost integration"],
         resultsOverTime: ["Better summer comfort", "Greater biodiversity", "Less stress on plants and people"]
       },
-      {
-        title: "Garden Five",
-        subtitle: "Water logic: infiltration, holding, and resilience.",
-        image: "img/garden-05.jpg",
+      { title: "Garden Five", subtitle: "Water logic: infiltration, holding, and resilience.", image: "img/garden-05.jpg",
         salesLine: "A garden designed around how water moves — not fighting it.",
         designedFor: ["Slope + runoff", "Clay soils", "Storm events + dry spells"],
         builtWith: ["Contour shaping + micro-catchments", "Permeable paths", "Planting that suits wet/dry cycles"],
         resultsOverTime: ["Less water loss", "Healthier root systems", "More consistent growth across seasons"]
       },
-      {
-        title: "Garden Six",
-        subtitle: "An indigenous / place-based garden that belongs.",
-        image: "img/garden-06.jpg",
+      { title: "Garden Six", subtitle: "An indigenous / place-based garden that belongs.", image: "img/garden-06.jpg",
         salesLine: "Planting that belongs to the land — supporting local ecology and deepening the feeling of home.",
         designedFor: ["Local birds + insects", "Low intervention over time", "A grounded, native aesthetic"],
         builtWith: ["Local provenance logic", "Layered habitat structure", "Maintenance pathways that keep it tidy"],
@@ -224,16 +185,10 @@
       }
     ];
 
-    // =========================
-    // STATE
-    // =========================
     let current = 0;
     let timer = null;
     let autoplay = true;
 
-    // =========================
-    // ELEMENTS
-    // =========================
     const imagePanel = document.getElementById("imagePanel");
     const gardenTitle = document.getElementById("gardenTitle");
     const gardenSubtitle = document.getElementById("gardenSubtitle");
@@ -246,9 +201,6 @@
     const nextBtn = document.getElementById("nextBtn");
     const btnScript = document.getElementById("btn-script");
 
-    // =========================
-    // HELPERS
-    // =========================
     function setList(el, items) {
       el.innerHTML = "";
       items.forEach((t) => {
@@ -311,44 +263,31 @@
     function next() { render((current + 1) % GARDENS.length); }
     function prev() { render((current - 1 + GARDENS.length) % GARDENS.length); }
 
-    function stopAutoplay() {
-      if (timer) clearInterval(timer);
-      timer = null;
-    }
-
+    function stopAutoplay() { if (timer) clearInterval(timer); timer = null; }
     function startAutoplay() {
       stopAutoplay();
       if (!autoplay) return;
       timer = setInterval(next, 7000);
     }
 
-    // =========================
-    // INIT
-    // =========================
     document.addEventListener("DOMContentLoaded", () => {
-      // Build thumbs
+      // Thumbs
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
         b.className =
           "no-select snap-start shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
         b.innerHTML = `<div class="font-medium leading-tight">${g.title}</div><div class="text-xs opacity-70">View</div>`;
-        b.addEventListener("click", () => {
-          render(i);
-          startAutoplay();
-        });
+        b.addEventListener("click", () => { render(i); startAutoplay(); });
         thumbRow.appendChild(b);
       });
 
-      // First render + autoplay
       render(0, true);
       startAutoplay();
 
-      // Nav buttons
       prevBtn.addEventListener("click", () => { prev(); startAutoplay(); });
       nextBtn.addEventListener("click", () => { next(); startAutoplay(); });
 
-      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
@@ -363,17 +302,12 @@
         btnScript.textContent = "Back";
       });
 
-      // Keyboard support
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") { next(); startAutoplay(); }
         if (e.key === "ArrowLeft") { prev(); startAutoplay(); }
       });
 
-      // Swipe support (anywhere)
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
-
+      let startX = 0, startY = 0, tracking = false;
       document.body.addEventListener("touchstart", (e) => {
         if (!e.touches || e.touches.length !== 1) return;
         tracking = true;
