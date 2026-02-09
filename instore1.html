@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE + Wild Cottage Garden copy) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +53,6 @@
 </head>
 
 <body class="bg-nostalgic-beige text-gardener-green safe">
-  <!-- UPDATED: reduce top padding further -->
   <div class="h-[100dvh] w-full flex flex-col pt-1">
     <main class="flex-1">
       <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
@@ -66,9 +65,9 @@
               <div class="border-t border-gardener-green/10 bg-nostalgic-beige">
                 <div class="px-5 py-3 flex items-end justify-between gap-6">
                   <div class="min-w-0">
-                    <div id="gardenTitle" class="font-serif text-[1.65rem] leading-tight truncate">Garden One</div>
+                    <div id="gardenTitle" class="font-serif text-[1.65rem] leading-tight truncate">Wild Cottage Garden</div>
                     <div id="gardenSubtitle" class="text-sm opacity-70 mt-1 line-clamp-2">
-                      A calm, layered ecological garden built for long time.
+                      Soft pastels and silver-white tones, hybrid native–exotic planting for birds and habitat.
                     </div>
                   </div>
                   <div class="flex gap-3 shrink-0">
@@ -98,7 +97,8 @@
 
               <div class="mt-6 space-y-6 text-base leading-relaxed min-h-0">
                 <p id="salesLine" class="text-lg">
-                  A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.
+                  A wild cottage garden in pale tones—pastels, whites and silvers—held by clear structure and a soft silver screen.
+                  Basalt steppers guide a sensory walk through scent, movement and seasonal bloom, while layered planting quietly builds habitat and everyday calm.
                 </p>
 
                 <div class="grid grid-cols-1 gap-5">
@@ -145,8 +145,8 @@
 
     const GARDENS = [
       {
-        title: "Garden One",
-        subtitle: "A layered ecological garden designed for calm and habitat.",
+        title: "Wild Cottage Garden",
+        subtitle: "Soft pastels and silver-white tones, hybrid native–exotic planting for birds and habitat.",
         images: [
           "img/garden-01-01.jpg",
           "img/garden-01-02.jpg",
@@ -154,11 +154,27 @@
           "img/garden-01-04.jpg",
           "img/garden-01-05.jpg"
         ],
-        salesLine: "A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.",
-        designedFor: ["Family use + play", "Low-stress maintenance", "Shade + seasonal comfort"],
-        builtWith: ["Permeable paths + contour logic", "Indigenous / climate-fit planting", "Habitat logs + layered structure"],
-        resultsOverTime: ["Richer soil and mulch ecology", "More birds / insects", "Better water holding and microclimate"]
+        salesLine:
+          "A wild cottage garden in pale tones—pastels, whites and silvers—held by clear structure and a soft silver screen. Basalt steppers guide a sensory walk through scent, movement and seasonal bloom, while layered planting quietly builds habitat and everyday calm.",
+        designedFor: [
+          "A guided garden walk (sensory + seasonal)",
+          "Nectar-loving birds and pollinators",
+          "Cottage character with ecological performance"
+        ],
+        builtWith: [
+          "Structure trees: Pyrus salicifolia, Cercis canadensis, Malus",
+          "Soft silver screen: Elaeagnus (Silverberry)",
+          "Meadow layer: Poa + Calamagrostis ‘Karl Foerster’ + Festuca glauca",
+          "Long-bloom colour: catmint + Salvia nemorosa + Buddleja",
+          "Texture + ground: Stachys, Sedum, Pratia; native Enchylaena"
+        ],
+        resultsOverTime: [
+          "More birds, more movement, more life",
+          "A stronger seasonal rhythm—bloom → seed → structure",
+          "A garden that softens each year, but performs harder"
+        ]
       },
+
       {
         title: "Garden Two",
         subtitle: "Designed for beauty under real conditions — sun, wind, and clay.",
@@ -174,6 +190,7 @@
         builtWith: ["Drought-tuned species mix", "Layering for density and habitat", "Soil building + mulch strategy"],
         resultsOverTime: ["Stability in heatwaves", "Seasonal colour without fragility", "Less weed pressure over time"]
       },
+
       {
         title: "Garden Three",
         subtitle: "A small space transformed into living infrastructure.",
@@ -189,6 +206,7 @@
         builtWith: ["Vertical + mid-layer planting", "Microclimate pockets", "Permeable surfaces where possible"],
         resultsOverTime: ["Cooler outdoor feel", "More pollinators", "A stronger sense of ‘place’"]
       },
+
       {
         title: "Garden Four",
         subtitle: "A canopy-forward garden: shade, comfort, and long time.",
@@ -204,6 +222,7 @@
         builtWith: ["Canopy planning + spacing", "Understorey guilds", "Soil/compost integration"],
         resultsOverTime: ["Better summer comfort", "Greater biodiversity", "Less stress on plants and people"]
       },
+
       {
         title: "Garden Five",
         subtitle: "Water logic: infiltration, holding, and resilience.",
@@ -219,6 +238,7 @@
         builtWith: ["Contour shaping + micro-catchments", "Permeable paths", "Planting that suits wet/dry cycles"],
         resultsOverTime: ["Less water loss", "Healthier root systems", "More consistent growth across seasons"]
       },
+
       {
         title: "Garden Six",
         subtitle: "An indigenous / place-based garden that belongs.",
@@ -319,7 +339,6 @@
       setActiveThumb(gIndex);
     }
 
-    // NAV (image-first)
     function nextImageOrGarden() {
       const g = GARDENS[currentGardenIndex];
       const total = (g.images && g.images.length) ? g.images.length : 1;
@@ -328,7 +347,6 @@
         render(currentGardenIndex, currentImageIndex + 1);
         return;
       }
-      // move to next garden
       const nextGarden = (currentGardenIndex + 1) % GARDENS.length;
       render(nextGarden, 0);
     }
@@ -341,7 +359,6 @@
         render(currentGardenIndex, currentImageIndex - 1);
         return;
       }
-      // move to previous garden's last image
       const prevGarden = (currentGardenIndex - 1 + GARDENS.length) % GARDENS.length;
       const prevTotal = (GARDENS[prevGarden].images && GARDENS[prevGarden].images.length) ? GARDENS[prevGarden].images.length : 1;
       render(prevGarden, Math.max(0, prevTotal - 1));
@@ -351,13 +368,11 @@
     function startAutoplay() {
       stopAutoplay();
       if (!autoplay) return;
-      // adjust interval if you want faster/slower image cycling
       timer = setInterval(nextImageOrGarden, 5000);
     }
 
-    // INIT
     document.addEventListener("DOMContentLoaded", () => {
-      // Build thumbs
+      // Build thumbs (gardens)
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
@@ -371,15 +386,12 @@
         thumbRow.appendChild(b);
       });
 
-      // First render + autoplay
       render(0, 0, true);
       startAutoplay();
 
-      // Arrows now cycle images (and wrap gardens)
       prevBtn.addEventListener("click", () => { prevImageOrGarden(); startAutoplay(); });
       nextBtn.addEventListener("click", () => { nextImageOrGarden(); startAutoplay(); });
 
-      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
@@ -390,17 +402,16 @@
           return;
         }
         salesLine.textContent =
-          "“This is an ecological garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. Soil, water, canopy, and habitat start working together, so the garden becomes calmer and richer each season.”";
+          "“This is a wild cottage garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. The planting supports birds and pollinators, while the garden becomes calmer and richer each season.”";
         btnScript.textContent = "Back";
       });
 
-      // Keyboard support
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") { nextImageOrGarden(); startAutoplay(); }
         if (e.key === "ArrowLeft") { prevImageOrGarden(); startAutoplay(); }
       });
 
-      // Swipe support (anywhere)
+      // Swipe support
       let startX = 0, startY = 0, tracking = false;
 
       document.body.addEventListener("touchstart", (e) => {
