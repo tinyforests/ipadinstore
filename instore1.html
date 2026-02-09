@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE + right panel scroll) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE + right panel scroll FIXED) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,6 +48,13 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+    /* FIX: iPad momentum scrolling for the right panel */
+    #rightScroll {
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+    #thumbRow { touch-action: pan-x; }
+
     @media (prefers-reduced-motion: reduce) { .fade { transition: none !important; } }
   </style>
 </head>
@@ -91,9 +98,9 @@
                 <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
               </div>
 
-              <!-- UPDATED: make this middle area scrollable (only this part scrolls) -->
+              <!-- FIX: flex-1 so this area has a bounded height and can scroll -->
               <div id="rightScroll"
-                   class="mt-6 space-y-6 text-base leading-relaxed min-h-0 overflow-y-auto pr-2 hide-scrollbar">
+                   class="mt-6 flex-1 space-y-6 text-base leading-relaxed min-h-0 overflow-y-auto pr-2 hide-scrollbar">
                 <p id="salesLine" class="text-lg">
                   A wild cottage garden in pale tones—pastels, whites and silvers—held by clear structure and a soft silver screen.
                   Basalt steppers guide a sensory walk through scent, movement and seasonal bloom, while layered planting quietly builds habitat and everyday calm.
@@ -117,7 +124,7 @@
                 </div>
               </div>
 
-              <div class="mt-auto pt-6 border-t border-gardener-green/10">
+              <div class="pt-6 border-t border-gardener-green/10">
                 <div class="flex items-center justify-between gap-4 flex-wrap">
                   <a href="mailto:hello@gardenerandson.com.au?subject=Garden%20consultation%20request"
                      class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
@@ -160,6 +167,7 @@
           "Soft silver screen: Elaeagnus (Silverberry)",
           "Meadow layer: Poa + Calamagrostis ‘Karl Foerster’ + Festuca glauca",
           "Long-bloom colour: catmint + Salvia nemorosa + Buddleja",
+          "Airy seasonal lift: Verbena bonariensis (pollinator magnet)",
           "Texture + ground: Stachys, Sedum, Pratia; native Enchylaena"
         ],
         resultsOverTime: [
@@ -294,8 +302,7 @@
 
       setActiveThumb(gIndex);
 
-      // NEW: reset right-panel scroll to top whenever garden changes
-      if (rightScroll) rightScroll.scrollTo({ top: 0, behavior: "smooth" });
+      if (rightScroll) rightScroll.scrollTo({ top: 0, behavior: "auto" });
     }
 
     function nextImageOrGarden() {
@@ -359,7 +366,7 @@
         salesLine.textContent =
           "“This is a wild cottage garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. The planting supports birds and pollinators, while the garden becomes calmer and richer each season.”";
         btnScript.textContent = "Back";
-        if (rightScroll) rightScroll.scrollTo({ top: 0, behavior: "smooth" });
+        if (rightScroll) rightScroll.scrollTo({ top: 0, behavior: "auto" });
       });
 
       window.addEventListener("keydown", (e) => {
