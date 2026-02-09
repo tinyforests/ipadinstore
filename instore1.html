@@ -1,0 +1,575 @@
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Gardener & Son — In-Store Gardens</title>
+
+  <meta name="description" content="In-store iPad display: six gardens + sales talk for Gardener & Son." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Abril Fatface"', "serif"],
+            sans: ['"IBM Plex Sans"', "sans-serif"],
+          },
+          colors: {
+            "gardener-green": "#3d4535",
+            "nostalgic-beige": "#fff0dc",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { font-family: "IBM Plex Sans", sans-serif; }
+    h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
+
+    /* iPad / kiosk niceties */
+    html, body { height: 100%; }
+    body { overscroll-behavior: none; }
+    .safe { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+    .no-select { -webkit-user-select: none; user-select: none; }
+    :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
+
+    /* Smooth fades for slide changes */
+    .fade { transition: opacity 320ms ease; }
+
+    /* Hide scrollbars for the thumbs row on iPad */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Optional: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      .fade { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-nostalgic-beige text-gardener-green safe">
+  <div class="min-h-full flex flex-col">
+    <!-- Top bar -->
+    <header class="border-b border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-8 py-6 flex items-start justify-between gap-6">
+        <div>
+          <div class="font-serif text-2xl tracking-tight leading-none">Gardener & Son</div>
+          <div class="text-xs uppercase tracking-[0.18em] mt-2 opacity-60">Gardens · Objects · Stories</div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="btn-gardens" class="text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+            Gardens
+          </button>
+          <button id="btn-how" class="text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+            Why ecological
+          </button>
+          <button id="btn-autoplay" class="text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+            Autoplay: ON
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <div class="max-w-7xl mx-auto px-8 py-8">
+        <!-- Gardens view -->
+        <section id="view-gardens" class="grid lg:grid-cols-12 gap-10 items-stretch">
+          <!-- Image panel -->
+          <div class="lg:col-span-7">
+            <div class="relative border border-gardener-green/10 bg-gardener-green/5 overflow-hidden rounded-none">
+              <!-- Image area (set background image via JS, with a safe fallback) -->
+              <div id="imagePanel" class="fade opacity-100 w-full aspect-[4/3] bg-gardener-green/10"></div>
+
+              <!-- Overlay label -->
+              <div class="absolute left-0 right-0 bottom-0 px-6 py-5 bg-nostalgic-beige/85 backdrop-blur border-t border-gardener-green/10">
+                <div class="flex items-end justify-between gap-6">
+                  <div>
+                    <div class="text-xs uppercase tracking-[0.18em] opacity-60">Garden</div>
+                    <div id="gardenTitle" class="font-serif text-3xl leading-tight mt-1">Garden One</div>
+                    <div id="gardenSubtitle" class="text-sm opacity-70 mt-2">A calm, layered ecological garden built for long time.</div>
+                  </div>
+                  <div class="flex gap-3">
+                    <button id="prevBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                      ←
+                    </button>
+                    <button id="nextBtn" class="no-select text-sm border border-gardener-green px-5 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                      →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thumbs -->
+            <div class="mt-6">
+              <div class="text-xs uppercase tracking-[0.18em] opacity-60 mb-3">Tap a garden</div>
+              <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2"></div>
+            </div>
+          </div>
+
+          <!-- Sales / details panel -->
+          <div class="lg:col-span-5">
+            <div class="border border-gardener-green/10 bg-gardener-green/5 p-8 h-full flex flex-col">
+              <div class="flex items-start justify-between gap-6">
+                <div>
+                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
+                  <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
+                </div>
+                <div class="text-xs opacity-60 text-right">
+                  <div>Swipe left/right</div>
+                  <div>or use arrows</div>
+                </div>
+              </div>
+
+              <div class="mt-8 space-y-6 text-base leading-relaxed">
+                <p id="salesLine" class="text-lg">
+                  A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.
+                </p>
+
+                <div class="grid grid-cols-1 gap-6">
+                  <div class="border-l-2 border-gardener-green/20 pl-5">
+                    <div class="text-sm font-medium mb-2">Designed for</div>
+                    <ul id="designedFor" class="text-sm leading-relaxed opacity-80 list-disc pl-5 space-y-1"></ul>
+                  </div>
+
+                  <div class="border-l-2 border-gardener-green/20 pl-5">
+                    <div class="text-sm font-medium mb-2">Built with</div>
+                    <ul id="builtWith" class="text-sm leading-relaxed opacity-80 list-disc pl-5 space-y-1"></ul>
+                  </div>
+
+                  <div class="border-l-2 border-gardener-green/20 pl-5">
+                    <div class="text-sm font-medium mb-2">Results over time</div>
+                    <ul id="resultsOverTime" class="text-sm leading-relaxed opacity-80 list-disc pl-5 space-y-1"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-10 pt-8 border-t border-gardener-green/10">
+                <div class="flex flex-col gap-4">
+                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">Next step</div>
+                  <div class="flex gap-4">
+                    <a href="mailto:hello@gardenerandson.com.au?subject=Garden%20consultation%20request" class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                      Book a consult
+                    </a>
+                    <button id="btn-script" class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                      Quick pitch
+                    </button>
+                  </div>
+                  <p class="text-xs opacity-60 leading-relaxed">
+                    Tip: add a QR code image file and link it below (search “QR to mailto” or “QR to booking form”).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Why ecological view -->
+        <section id="view-how" class="hidden">
+          <div class="grid lg:grid-cols-12 gap-10">
+            <div class="lg:col-span-7">
+              <div class="border border-gardener-green/10 bg-gardener-green/5 p-10">
+                <div class="text-xs uppercase tracking-[0.18em] opacity-60">Why ecological gardens</div>
+                <h2 class="font-serif text-5xl leading-[1.02] mt-3">
+                  A garden can be<br />infrastructure.
+                </h2>
+
+                <div class="mt-8 space-y-6 text-base leading-relaxed opacity-90">
+                  <p>
+                    An ecological garden doesn’t just look good — it functions. It builds soil, holds water, softens extremes,
+                    supports birds and insects, and improves with time.
+                  </p>
+                  <p>
+                    The goal is a garden that belongs: suited to site conditions, planted in layers, and designed to be maintained
+                    without fighting the climate.
+                  </p>
+                </div>
+
+                <div class="mt-10 grid md:grid-cols-2 gap-6 text-sm">
+                  <div class="border-l-2 border-gardener-green/20 pl-5">
+                    <div class="font-medium mb-2">What clients usually want</div>
+                    <ul class="opacity-80 list-disc pl-5 space-y-1">
+                      <li>Beauty that lasts</li>
+                      <li>Low-stress maintenance</li>
+                      <li>Shade + comfort outdoors</li>
+                      <li>A garden that feels alive</li>
+                    </ul>
+                  </div>
+
+                  <div class="border-l-2 border-gardener-green/20 pl-5">
+                    <div class="font-medium mb-2">What the garden delivers</div>
+                    <ul class="opacity-80 list-disc pl-5 space-y-1">
+                      <li>Habitat + biodiversity</li>
+                      <li>Soil formation + resilience</li>
+                      <li>Water holding + infiltration</li>
+                      <li>Seasonal depth + calm</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-gardener-green/10 flex flex-col sm:flex-row gap-4">
+                  <button id="btn-back-to-gardens" class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                    Back to gardens
+                  </button>
+                  <a href="mailto:hello@gardenerandson.com.au?subject=In-store%20enquiry" class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
+                    Email the studio
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5">
+              <div class="border border-gardener-green/10 bg-gardener-green/5 p-10 h-full">
+                <div class="text-xs uppercase tracking-[0.18em] opacity-60">In-store script</div>
+                <h3 class="font-serif text-4xl leading-[1.05] mt-3">A simple way to say it.</h3>
+
+                <div class="mt-8 space-y-6 text-base leading-relaxed opacity-90">
+                  <p>
+                    “These gardens are designed to thrive in real conditions — not just look good on install day.
+                    They’re built in layers, tuned to the site, and designed to mature into depth.”
+                  </p>
+                  <p>
+                    “The difference is you’re not fighting the garden. Soil, water, canopy, and habitat begin working together,
+                    and the garden becomes calmer and richer each season.”
+                  </p>
+                  <p class="text-sm opacity-70">
+                    Use the gardens view to show examples, then return here when someone asks “what makes it ecological?”
+                  </p>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-gardener-green/10">
+                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">Add your booking link</div>
+                  <p class="text-sm opacity-80 mt-3">
+                    If you have a booking form, replace the email buttons with that URL and place a QR code on screen.
+                  </p>
+
+                  <!-- Optional QR placeholder -->
+                  <div class="mt-6 border border-gardener-green/10 bg-gardener-green/10 aspect-square w-48"></div>
+                  <div class="text-xs opacity-60 mt-3">QR placeholder (replace with an <img>)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom bar -->
+    <footer class="border-t border-gardener-green/10">
+      <div class="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between gap-6">
+        <div class="text-xs opacity-60">
+          © <span id="year"></span> Gardener & Son · Melbourne
+        </div>
+        <div class="text-xs opacity-60">
+          Tap • Swipe • Autoplay
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // =========================
+    // DATA — Replace image paths
+    // =========================
+    // Put your images in: /img/garden-01.jpg ... garden-06.jpg (or adjust the paths below).
+    const GARDENS = [
+      {
+        title: "Garden One",
+        subtitle: "A layered ecological garden designed for calm and habitat.",
+        image: "img/garden-01.jpg",
+        salesLine: "A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.",
+        designedFor: ["Family use + play", "Low-stress maintenance", "Shade + seasonal comfort"],
+        builtWith: ["Permeable paths + contour logic", "Indigenous / climate-fit planting", "Habitat logs + layered structure"],
+        resultsOverTime: ["Richer soil and mulch ecology", "More birds / insects", "Better water holding and microclimate"]
+      },
+      {
+        title: "Garden Two",
+        subtitle: "Designed for beauty under real conditions — sun, wind, and clay.",
+        image: "img/garden-02.jpg",
+        salesLine: "Ecological structure first, then beauty — a garden that gets better as it matures.",
+        designedFor: ["Full sun exposure", "Hot edges + reflected heat", "Low irrigation reliance"],
+        builtWith: ["Drought-tuned species mix", "Layering for density and habitat", "Soil building + mulch strategy"],
+        resultsOverTime: ["Stability in heatwaves", "Seasonal colour without fragility", "Less weed pressure over time"]
+      },
+      {
+        title: "Garden Three",
+        subtitle: "A small space transformed into living infrastructure.",
+        image: "img/garden-03.jpg",
+        salesLine: "Proof that even small gardens can restore habitat and create daily calm.",
+        designedFor: ["Compact courtyard / narrow sites", "Entertaining + circulation", "Privacy + green enclosure"],
+        builtWith: ["Vertical + mid-layer planting", "Microclimate pockets", "Permeable surfaces where possible"],
+        resultsOverTime: ["Cooler outdoor feel", "More pollinators", "A stronger sense of ‘place’"]
+      },
+      {
+        title: "Garden Four",
+        subtitle: "A canopy-forward garden: shade, comfort, and long time.",
+        image: "img/garden-04.jpg",
+        salesLine: "Canopy and understorey working together — shade above, habitat below.",
+        designedFor: ["Heat mitigation", "Outdoor sitting areas", "Bird life + layered habitat"],
+        builtWith: ["Canopy planning + spacing", "Understorey guilds", "Soil/compost integration"],
+        resultsOverTime: ["Better summer comfort", "Greater biodiversity", "Less stress on plants and people"]
+      },
+      {
+        title: "Garden Five",
+        subtitle: "Water logic: infiltration, holding, and resilience.",
+        image: "img/garden-05.jpg",
+        salesLine: "A garden designed around how water moves — not fighting it.",
+        designedFor: ["Slope + runoff", "Clay soils", "Storm events + dry spells"],
+        builtWith: ["Contour shaping + micro-catchments", "Permeable paths", "Planting that suits wet/dry cycles"],
+        resultsOverTime: ["Less water loss", "Healthier root systems", "More consistent growth across seasons"]
+      },
+      {
+        title: "Garden Six",
+        subtitle: "An indigenous / place-based garden that belongs.",
+        image: "img/garden-06.jpg",
+        salesLine: "Planting that belongs to the land — supporting local ecology and deepening the feeling of home.",
+        designedFor: ["Local birds + insects", "Low intervention over time", "A grounded, native aesthetic"],
+        builtWith: ["Local provenance logic", "Layered habitat structure", "Maintenance pathways that keep it tidy"],
+        resultsOverTime: ["More wildlife presence", "A calmer garden rhythm", "Seasonal richness with coherence"]
+      }
+    ];
+
+    // =========================
+    // STATE
+    // =========================
+    let current = 0;
+    let autoplay = true;
+    let timer = null;
+
+    // =========================
+    // ELEMENTS
+    // =========================
+    const yearEl = document.getElementById("year");
+    const imagePanel = document.getElementById("imagePanel");
+    const gardenTitle = document.getElementById("gardenTitle");
+    const gardenSubtitle = document.getElementById("gardenSubtitle");
+    const salesLine = document.getElementById("salesLine");
+    const designedFor = document.getElementById("designedFor");
+    const builtWith = document.getElementById("builtWith");
+    const resultsOverTime = document.getElementById("resultsOverTime");
+    const thumbRow = document.getElementById("thumbRow");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const btnAutoplay = document.getElementById("btn-autoplay");
+
+    const viewGardens = document.getElementById("view-gardens");
+    const viewHow = document.getElementById("view-how");
+    const btnGardens = document.getElementById("btn-gardens");
+    const btnHow = document.getElementById("btn-how");
+    const btnBackToGardens = document.getElementById("btn-back-to-gardens");
+    const btnScript = document.getElementById("btn-script");
+
+    // =========================
+    // HELPERS
+    // =========================
+    function setList(el, items) {
+      el.innerHTML = "";
+      items.forEach((t) => {
+        const li = document.createElement("li");
+        li.textContent = t;
+        el.appendChild(li);
+      });
+    }
+
+    function setActiveThumb(index) {
+      const buttons = thumbRow.querySelectorAll("button[data-index]");
+      buttons.forEach((b) => {
+        const isActive = Number(b.dataset.index) === index;
+        b.classList.toggle("bg-gardener-green", isActive);
+        b.classList.toggle("text-nostalgic-beige", isActive);
+        b.classList.toggle("border-gardener-green", isActive);
+        b.classList.toggle("bg-gardener-green/5", !isActive);
+        b.classList.toggle("text-gardener-green", !isActive);
+      });
+    }
+
+    function applyImage(el, src) {
+      // Use background-image for full-bleed.
+      // If the image fails to load, the background color remains as a tasteful placeholder.
+      el.style.backgroundImage = `url('${src}')`;
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+      el.style.backgroundRepeat = "no-repeat";
+    }
+
+    function render(index, instant = false) {
+      const g = GARDENS[index];
+      current = index;
+
+      if (!instant) {
+        imagePanel.classList.add("fade");
+        imagePanel.style.opacity = "0";
+        setTimeout(() => {
+          applyImage(imagePanel, g.image);
+          imagePanel.style.opacity = "1";
+        }, 220);
+      } else {
+        applyImage(imagePanel, g.image);
+        imagePanel.style.opacity = "1";
+      }
+
+      gardenTitle.textContent = g.title;
+      gardenSubtitle.textContent = g.subtitle;
+      salesLine.textContent = g.salesLine;
+
+      setList(designedFor, g.designedFor);
+      setList(builtWith, g.builtWith);
+      setList(resultsOverTime, g.resultsOverTime);
+
+      setActiveThumb(index);
+    }
+
+    function next() {
+      render((current + 1) % GARDENS.length);
+    }
+
+    function prev() {
+      render((current - 1 + GARDENS.length) % GARDENS.length);
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+      if (!autoplay) return;
+      timer = setInterval(next, 7000);
+    }
+
+    function stopAutoplay() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function setAutoplay(on) {
+      autoplay = on;
+      btnAutoplay.textContent = `Autoplay: ${autoplay ? "ON" : "OFF"}`;
+      if (autoplay) startAutoplay();
+      else stopAutoplay();
+    }
+
+    function showGardens() {
+      viewHow.classList.add("hidden");
+      viewGardens.classList.remove("hidden");
+      startAutoplay();
+    }
+
+    function showHow() {
+      viewGardens.classList.add("hidden");
+      viewHow.classList.remove("hidden");
+      stopAutoplay();
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    document.addEventListener("DOMContentLoaded", () => {
+      yearEl.textContent = new Date().getFullYear();
+
+      // Build thumbs
+      GARDENS.forEach((g, i) => {
+        const b = document.createElement("button");
+        b.dataset.index = i;
+        b.className =
+          "no-select shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
+        b.innerHTML = `<div class="font-medium leading-tight">${g.title}</div><div class="text-xs opacity-70">Tap to view</div>`;
+        b.addEventListener("click", () => {
+          render(i);
+          if (autoplay) startAutoplay();
+        });
+        thumbRow.appendChild(b);
+      });
+
+      // First render
+      render(0, true);
+      setAutoplay(true);
+
+      // Buttons
+      prevBtn.addEventListener("click", () => { prev(); if (autoplay) startAutoplay(); });
+      nextBtn.addEventListener("click", () => { next(); if (autoplay) startAutoplay(); });
+      btnAutoplay.addEventListener("click", () => setAutoplay(!autoplay));
+
+      btnGardens.addEventListener("click", showGardens);
+      btnHow.addEventListener("click", showHow);
+      if (btnBackToGardens) btnBackToGardens.addEventListener("click", showGardens);
+
+      // Quick pitch button — swaps the line for a concise script (and back)
+      let pitchMode = false;
+      btnScript.addEventListener("click", () => {
+        pitchMode = !pitchMode;
+        const g = GARDENS[current];
+        if (!pitchMode) {
+          salesLine.textContent = g.salesLine;
+          btnScript.textContent = "Quick pitch";
+          return;
+        }
+        salesLine.textContent =
+          "“This is an ecological garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. Soil, water, canopy, and habitat start working together, so the garden becomes calmer and richer each season.”";
+        btnScript.textContent = "Back to details";
+      });
+
+      // Keyboard support (if a keyboard is connected)
+      window.addEventListener("keydown", (e) => {
+        if (viewGardens.classList.contains("hidden")) return;
+        if (e.key === "ArrowRight") { next(); if (autoplay) startAutoplay(); }
+        if (e.key === "ArrowLeft") { prev(); if (autoplay) startAutoplay(); }
+      });
+
+      // Swipe support
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+
+      const swipeTarget = document.body;
+      swipeTarget.addEventListener("touchstart", (e) => {
+        if (viewGardens.classList.contains("hidden")) return;
+        if (!e.touches || e.touches.length !== 1) return;
+        tracking = true;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      swipeTarget.addEventListener("touchend", (e) => {
+        if (!tracking) return;
+        tracking = false;
+
+        const touch = e.changedTouches && e.changedTouches[0];
+        if (!touch) return;
+
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+
+        // Horizontal swipe threshold + ignore vertical scroll gestures
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          if (dx < 0) next();
+          else prev();
+          if (autoplay) startAutoplay();
+        }
+      }, { passive: true });
+    });
+  </script>
+
+  <!--
+    HOW TO USE
+    ----------
+    1) Put this file on your site or open it locally on the iPad (Files app → Safari).
+    2) Create an /img/ folder next to this HTML and add:
+       garden-01.jpg ... garden-06.jpg
+       (or update the paths in the GARDENS array)
+    3) Optional: replace mailto buttons with a booking form URL.
+    4) iPad kiosk tip: use Guided Access (Settings → Accessibility → Guided Access).
+  -->
+</body>
+</html>
