@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (UPDATED thumbs scroll + snap + padding) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,7 +90,7 @@
           <!-- Image panel -->
           <div class="lg:col-span-7">
             <div class="relative border border-gardener-green/10 bg-gardener-green/5 overflow-hidden rounded-none">
-              <!-- Image area (set background image via JS, with a safe fallback) -->
+              <!-- Image area -->
               <div id="imagePanel" class="fade opacity-100 w-full aspect-[4/3] bg-gardener-green/10"></div>
 
               <!-- Overlay label -->
@@ -116,7 +116,11 @@
             <!-- Thumbs -->
             <div class="mt-6">
               <div class="text-xs uppercase tracking-[0.18em] opacity-60 mb-3">Tap a garden</div>
-              <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2"></div>
+
+              <!-- UPDATED: added pr-8 so last card isn't clipped, plus snap scrolling -->
+              <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2 pr-8 snap-x snap-mandatory"></div>
+
+              <div class="text-xs opacity-50 mt-2">Scroll →</div>
             </div>
           </div>
 
@@ -258,7 +262,7 @@
 
                   <!-- Optional QR placeholder -->
                   <div class="mt-6 border border-gardener-green/10 bg-gardener-green/10 aspect-square w-48"></div>
-                  <div class="text-xs opacity-60 mt-3">QR placeholder (replace with an <img>)</div>
+                  <div class="text-xs opacity-60 mt-3">QR placeholder (replace with an &lt;img&gt;)</div>
                 </div>
               </div>
             </div>
@@ -393,14 +397,17 @@
         b.classList.toggle("bg-gardener-green", isActive);
         b.classList.toggle("text-nostalgic-beige", isActive);
         b.classList.toggle("border-gardener-green", isActive);
+
         b.classList.toggle("bg-gardener-green/5", !isActive);
         b.classList.toggle("text-gardener-green", !isActive);
       });
+
+      // UPDATED: ensure active thumb is fully visible + centered in the scroll row
+      const active = thumbRow.querySelector(`button[data-index="${index}"]`);
+      if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
 
     function applyImage(el, src) {
-      // Use background-image for full-bleed.
-      // If the image fails to load, the background color remains as a tasteful placeholder.
       el.style.backgroundImage = `url('${src}')`;
       el.style.backgroundSize = "cover";
       el.style.backgroundPosition = "center";
@@ -482,13 +489,18 @@
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
+
+        // UPDATED: added snap-start (pairs with snap-x on the container)
         b.className =
-          "no-select shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
+          "no-select snap-start shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
+
         b.innerHTML = `<div class="font-medium leading-tight">${g.title}</div><div class="text-xs opacity-70">Tap to view</div>`;
+
         b.addEventListener("click", () => {
           render(i);
           if (autoplay) startAutoplay();
         });
+
         thumbRow.appendChild(b);
       });
 
@@ -520,7 +532,7 @@
         btnScript.textContent = "Back to details";
       });
 
-      // Keyboard support (if a keyboard is connected)
+      // Keyboard support
       window.addEventListener("keydown", (e) => {
         if (viewGardens.classList.contains("hidden")) return;
         if (e.key === "ArrowRight") { next(); if (autoplay) startAutoplay(); }
@@ -551,7 +563,6 @@
         const dx = touch.clientX - startX;
         const dy = touch.clientY - startY;
 
-        // Horizontal swipe threshold + ignore vertical scroll gestures
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) {
           if (dx < 0) next();
           else prev();
