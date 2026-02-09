@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK FIT: no vertical scroll, no header, simplified labels) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK FIT + tighter caption band so thumbs fit) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,20 +37,14 @@
     body { font-family: "IBM Plex Sans", sans-serif; }
     h1, h2, h3, .font-serif { font-family: "Abril Fatface", serif; font-weight: 400; }
 
-    /* Kiosk / iPad fit */
     html, body { height: 100%; }
-    body { overscroll-behavior: none; }
+    body { overscroll-behavior: none; overflow: hidden; }
     .safe { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
     .no-select { -webkit-user-select: none; user-select: none; }
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
 
-    /* Prevent vertical scrolling entirely */
-    body { overflow: hidden; }
-
-    /* Smooth fades for slide changes */
     .fade { transition: opacity 320ms ease; }
 
-    /* Hide scrollbar for thumbs (keep horizontal scroll) */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -61,28 +55,21 @@
 </head>
 
 <body class="bg-nostalgic-beige text-gardener-green safe">
-  <!-- Full-screen kiosk frame -->
-  <div class="h-[100dvh] w-full flex flex-col">
-    <!-- Main content (fills screen) -->
+  <div class="h-[100dvh] w-full flex flex-col pt-4">
     <main class="flex-1">
-      <!-- Tighter padding + no footer so everything fits -->
-      <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 h-full">
-        <!-- Two-panel layout locked to available height -->
+      <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
         <section id="view-gardens" class="grid lg:grid-cols-12 gap-8 h-full">
-          <!-- Left: image + caption band + thumbs -->
+          <!-- Left -->
           <div class="lg:col-span-8 flex flex-col min-h-0">
-            <!-- Image + caption as a single block -->
             <div class="border border-gardener-green/10 bg-gardener-green/5 overflow-hidden flex flex-col">
-              <!-- Image (4:3) -->
               <div id="imagePanel" class="fade opacity-100 w-full aspect-[4/3] bg-gardener-green/10"></div>
 
-              <!-- Caption band under photo -->
+              <!-- UPDATED: tighter caption band + removed "Garden" label -->
               <div class="border-t border-gardener-green/10 bg-nostalgic-beige">
-                <div class="px-5 py-4 flex items-end justify-between gap-6">
+                <div class="px-5 py-3 flex items-end justify-between gap-6">
                   <div class="min-w-0">
-                    <div class="text-xs uppercase tracking-[0.18em] opacity-60">Garden</div>
-                    <div id="gardenTitle" class="font-serif text-3xl leading-tight mt-1 truncate">Garden One</div>
-                    <div id="gardenSubtitle" class="text-sm opacity-70 mt-2 line-clamp-2">
+                    <div id="gardenTitle" class="font-serif text-[1.65rem] leading-tight truncate">Garden One</div>
+                    <div id="gardenSubtitle" class="text-sm opacity-70 mt-1 line-clamp-2">
                       A calm, layered ecological garden built for long time.
                     </div>
                   </div>
@@ -98,14 +85,13 @@
               </div>
             </div>
 
-            <!-- Thumbs (horizontal scroll) -->
-            <div class="mt-4 min-h-0">
-              <!-- Removed "Tap a garden" and "Scroll →" text -->
-              <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-2 pr-8 snap-x snap-mandatory"></div>
+            <!-- UPDATED: thumbs block height + spacing tuned so it fits on iPad -->
+            <div class="mt-3 min-h-0">
+              <div id="thumbRow" class="hide-scrollbar flex gap-4 overflow-x-auto pb-1 pr-8 snap-x snap-mandatory"></div>
             </div>
           </div>
 
-          <!-- Right: Sales / details panel (narrow) -->
+          <!-- Right -->
           <div class="lg:col-span-4 flex flex-col min-h-0">
             <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0">
               <div class="flex items-start justify-between gap-6">
@@ -113,7 +99,6 @@
                   <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
                   <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
                 </div>
-                <!-- Removed “Swipe left/right or use arrows…” -->
               </div>
 
               <div class="mt-6 space-y-6 text-base leading-relaxed min-h-0">
@@ -153,7 +138,6 @@
               </div>
             </div>
 
-            <!-- Tiny unobtrusive brand line (optional). Remove if you want 100% blank. -->
             <div class="mt-3 text-xs opacity-50 select-none">
               Gardener & Son · Melbourne
             </div>
@@ -164,9 +148,6 @@
   </div>
 
   <script>
-    // =========================
-    // DATA — Replace image paths
-    // =========================
     const GARDENS = [
       {
         title: "Garden One",
@@ -224,16 +205,10 @@
       }
     ];
 
-    // =========================
-    // STATE
-    // =========================
     let current = 0;
     let timer = null;
     let autoplay = true;
 
-    // =========================
-    // ELEMENTS
-    // =========================
     const imagePanel = document.getElementById("imagePanel");
     const gardenTitle = document.getElementById("gardenTitle");
     const gardenSubtitle = document.getElementById("gardenSubtitle");
@@ -246,9 +221,6 @@
     const nextBtn = document.getElementById("nextBtn");
     const btnScript = document.getElementById("btn-script");
 
-    // =========================
-    // HELPERS
-    // =========================
     function setList(el, items) {
       el.innerHTML = "";
       items.forEach((t) => {
@@ -322,11 +294,7 @@
       timer = setInterval(next, 7000);
     }
 
-    // =========================
-    // INIT
-    // =========================
     document.addEventListener("DOMContentLoaded", () => {
-      // Build thumbs
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
@@ -340,15 +308,12 @@
         thumbRow.appendChild(b);
       });
 
-      // First render + autoplay
       render(0, true);
       startAutoplay();
 
-      // Nav buttons
       prevBtn.addEventListener("click", () => { prev(); startAutoplay(); });
       nextBtn.addEventListener("click", () => { next(); startAutoplay(); });
 
-      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
@@ -363,13 +328,11 @@
         btnScript.textContent = "Back";
       });
 
-      // Keyboard support
       window.addEventListener("keydown", (e) => {
         if (e.key === "ArrowRight") { next(); startAutoplay(); }
         if (e.key === "ArrowLeft") { prev(); startAutoplay(); }
       });
 
-      // Swipe support (anywhere)
       let startX = 0;
       let startY = 0;
       let tracking = false;
