@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK FIT + tighter top gap + remove bottom brand line) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,15 +48,13 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    @media (prefers-reduced-motion: reduce) {
-      .fade { transition: none !important; }
-    }
+    @media (prefers-reduced-motion: reduce) { .fade { transition: none !important; } }
   </style>
 </head>
 
 <body class="bg-nostalgic-beige text-gardener-green safe">
-  <!-- UPDATED: reduce top gap from pt-4 to pt-2 -->
-  <div class="h-[100dvh] w-full flex flex-col pt-2">
+  <!-- UPDATED: reduce top padding further -->
+  <div class="h-[100dvh] w-full flex flex-col pt-1">
     <main class="flex-1">
       <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
         <section id="view-gardens" class="grid lg:grid-cols-12 gap-8 h-full">
@@ -91,14 +89,11 @@
           </div>
 
           <!-- Right -->
-          <!-- UPDATED: remove the extra brand line below so the panel aligns to bottom -->
           <div class="lg:col-span-4 flex flex-col min-h-0">
             <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0">
-              <div class="flex items-start justify-between gap-6">
-                <div>
-                  <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
-                  <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
-                </div>
+              <div>
+                <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
+                <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
               </div>
 
               <div class="mt-6 space-y-6 text-base leading-relaxed min-h-0">
@@ -137,8 +132,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- REMOVED: “Gardener & Son · Melbourne” line -->
           </div>
         </section>
       </div>
@@ -146,11 +139,21 @@
   </div>
 
   <script>
+    // KIOSK MODE:
+    // Autoplay cycles images within a garden; after last image -> next garden (image 0).
+    // Arrows do the same (prev/next across images & gardens).
+
     const GARDENS = [
       {
         title: "Garden One",
         subtitle: "A layered ecological garden designed for calm and habitat.",
-        image: "img/garden-01.jpg",
+        images: [
+          "img/garden-01-01.jpg",
+          "img/garden-01-02.jpg",
+          "img/garden-01-03.jpg",
+          "img/garden-01-04.jpg",
+          "img/garden-01-05.jpg"
+        ],
         salesLine: "A garden designed to feel calm and alive — with soil, water, canopy, and habitat working together.",
         designedFor: ["Family use + play", "Low-stress maintenance", "Shade + seasonal comfort"],
         builtWith: ["Permeable paths + contour logic", "Indigenous / climate-fit planting", "Habitat logs + layered structure"],
@@ -159,7 +162,13 @@
       {
         title: "Garden Two",
         subtitle: "Designed for beauty under real conditions — sun, wind, and clay.",
-        image: "img/garden-02.jpg",
+        images: [
+          "img/garden-02-01.jpg",
+          "img/garden-02-02.jpg",
+          "img/garden-02-03.jpg",
+          "img/garden-02-04.jpg",
+          "img/garden-02-05.jpg"
+        ],
         salesLine: "Ecological structure first, then beauty — a garden that gets better as it matures.",
         designedFor: ["Full sun exposure", "Hot edges + reflected heat", "Low irrigation reliance"],
         builtWith: ["Drought-tuned species mix", "Layering for density and habitat", "Soil building + mulch strategy"],
@@ -168,7 +177,13 @@
       {
         title: "Garden Three",
         subtitle: "A small space transformed into living infrastructure.",
-        image: "img/garden-03.jpg",
+        images: [
+          "img/garden-03-01.jpg",
+          "img/garden-03-02.jpg",
+          "img/garden-03-03.jpg",
+          "img/garden-03-04.jpg",
+          "img/garden-03-05.jpg"
+        ],
         salesLine: "Proof that even small gardens can restore habitat and create daily calm.",
         designedFor: ["Compact courtyard / narrow sites", "Entertaining + circulation", "Privacy + green enclosure"],
         builtWith: ["Vertical + mid-layer planting", "Microclimate pockets", "Permeable surfaces where possible"],
@@ -177,7 +192,13 @@
       {
         title: "Garden Four",
         subtitle: "A canopy-forward garden: shade, comfort, and long time.",
-        image: "img/garden-04.jpg",
+        images: [
+          "img/garden-04-01.jpg",
+          "img/garden-04-02.jpg",
+          "img/garden-04-03.jpg",
+          "img/garden-04-04.jpg",
+          "img/garden-04-05.jpg"
+        ],
         salesLine: "Canopy and understorey working together — shade above, habitat below.",
         designedFor: ["Heat mitigation", "Outdoor sitting areas", "Bird life + layered habitat"],
         builtWith: ["Canopy planning + spacing", "Understorey guilds", "Soil/compost integration"],
@@ -186,7 +207,13 @@
       {
         title: "Garden Five",
         subtitle: "Water logic: infiltration, holding, and resilience.",
-        image: "img/garden-05.jpg",
+        images: [
+          "img/garden-05-01.jpg",
+          "img/garden-05-02.jpg",
+          "img/garden-05-03.jpg",
+          "img/garden-05-04.jpg",
+          "img/garden-05-05.jpg"
+        ],
         salesLine: "A garden designed around how water moves — not fighting it.",
         designedFor: ["Slope + runoff", "Clay soils", "Storm events + dry spells"],
         builtWith: ["Contour shaping + micro-catchments", "Permeable paths", "Planting that suits wet/dry cycles"],
@@ -195,7 +222,13 @@
       {
         title: "Garden Six",
         subtitle: "An indigenous / place-based garden that belongs.",
-        image: "img/garden-06.jpg",
+        images: [
+          "img/garden-06-01.jpg",
+          "img/garden-06-02.jpg",
+          "img/garden-06-03.jpg",
+          "img/garden-06-04.jpg",
+          "img/garden-06-05.jpg"
+        ],
         salesLine: "Planting that belongs to the land — supporting local ecology and deepening the feeling of home.",
         designedFor: ["Local birds + insects", "Low intervention over time", "A grounded, native aesthetic"],
         builtWith: ["Local provenance logic", "Layered habitat structure", "Maintenance pathways that keep it tidy"],
@@ -203,10 +236,13 @@
       }
     ];
 
-    let current = 0;
+    // STATE
+    let currentGardenIndex = 0;
+    let currentImageIndex = 0;
     let timer = null;
     let autoplay = true;
 
+    // ELEMENTS
     const imagePanel = document.getElementById("imagePanel");
     const gardenTitle = document.getElementById("gardenTitle");
     const gardenSubtitle = document.getElementById("gardenSubtitle");
@@ -219,6 +255,7 @@
     const nextBtn = document.getElementById("nextBtn");
     const btnScript = document.getElementById("btn-script");
 
+    // HELPERS
     function setList(el, items) {
       el.innerHTML = "";
       items.forEach((t) => {
@@ -251,19 +288,23 @@
       if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
 
-    function render(index, instant = false) {
-      const g = GARDENS[index];
-      current = index;
+    function render(gIndex, iIndex, instant = false) {
+      const g = GARDENS[gIndex];
+      currentGardenIndex = gIndex;
+      currentImageIndex = iIndex;
+
+      const safeImages = Array.isArray(g.images) && g.images.length ? g.images : [];
+      const src = safeImages[currentImageIndex] || safeImages[0] || "";
 
       if (!instant) {
         imagePanel.classList.add("fade");
         imagePanel.style.opacity = "0";
         setTimeout(() => {
-          applyImage(imagePanel, g.image);
+          applyImage(imagePanel, src);
           imagePanel.style.opacity = "1";
         }, 220);
       } else {
-        applyImage(imagePanel, g.image);
+        applyImage(imagePanel, src);
         imagePanel.style.opacity = "1";
       }
 
@@ -275,24 +316,48 @@
       setList(builtWith, g.builtWith);
       setList(resultsOverTime, g.resultsOverTime);
 
-      setActiveThumb(index);
+      setActiveThumb(gIndex);
     }
 
-    function next() { render((current + 1) % GARDENS.length); }
-    function prev() { render((current - 1 + GARDENS.length) % GARDENS.length); }
+    // NAV (image-first)
+    function nextImageOrGarden() {
+      const g = GARDENS[currentGardenIndex];
+      const total = (g.images && g.images.length) ? g.images.length : 1;
 
-    function stopAutoplay() {
-      if (timer) clearInterval(timer);
-      timer = null;
+      if (currentImageIndex < total - 1) {
+        render(currentGardenIndex, currentImageIndex + 1);
+        return;
+      }
+      // move to next garden
+      const nextGarden = (currentGardenIndex + 1) % GARDENS.length;
+      render(nextGarden, 0);
     }
 
+    function prevImageOrGarden() {
+      const g = GARDENS[currentGardenIndex];
+      const total = (g.images && g.images.length) ? g.images.length : 1;
+
+      if (currentImageIndex > 0) {
+        render(currentGardenIndex, currentImageIndex - 1);
+        return;
+      }
+      // move to previous garden's last image
+      const prevGarden = (currentGardenIndex - 1 + GARDENS.length) % GARDENS.length;
+      const prevTotal = (GARDENS[prevGarden].images && GARDENS[prevGarden].images.length) ? GARDENS[prevGarden].images.length : 1;
+      render(prevGarden, Math.max(0, prevTotal - 1));
+    }
+
+    function stopAutoplay() { if (timer) clearInterval(timer); timer = null; }
     function startAutoplay() {
       stopAutoplay();
       if (!autoplay) return;
-      timer = setInterval(next, 7000);
+      // adjust interval if you want faster/slower image cycling
+      timer = setInterval(nextImageOrGarden, 5000);
     }
 
+    // INIT
     document.addEventListener("DOMContentLoaded", () => {
+      // Build thumbs
       GARDENS.forEach((g, i) => {
         const b = document.createElement("button");
         b.dataset.index = i;
@@ -300,22 +365,25 @@
           "no-select snap-start shrink-0 w-40 h-24 border border-gardener-green/10 bg-gardener-green/5 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors text-left p-4 text-sm flex flex-col justify-between";
         b.innerHTML = `<div class="font-medium leading-tight">${g.title}</div><div class="text-xs opacity-70">View</div>`;
         b.addEventListener("click", () => {
-          render(i);
+          render(i, 0);
           startAutoplay();
         });
         thumbRow.appendChild(b);
       });
 
-      render(0, true);
+      // First render + autoplay
+      render(0, 0, true);
       startAutoplay();
 
-      prevBtn.addEventListener("click", () => { prev(); startAutoplay(); });
-      nextBtn.addEventListener("click", () => { next(); startAutoplay(); });
+      // Arrows now cycle images (and wrap gardens)
+      prevBtn.addEventListener("click", () => { prevImageOrGarden(); startAutoplay(); });
+      nextBtn.addEventListener("click", () => { nextImageOrGarden(); startAutoplay(); });
 
+      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
-        const g = GARDENS[current];
+        const g = GARDENS[currentGardenIndex];
         if (!pitchMode) {
           salesLine.textContent = g.salesLine;
           btnScript.textContent = "Quick pitch";
@@ -326,14 +394,14 @@
         btnScript.textContent = "Back";
       });
 
+      // Keyboard support
       window.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight") { next(); startAutoplay(); }
-        if (e.key === "ArrowLeft") { prev(); startAutoplay(); }
+        if (e.key === "ArrowRight") { nextImageOrGarden(); startAutoplay(); }
+        if (e.key === "ArrowLeft") { prevImageOrGarden(); startAutoplay(); }
       });
 
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
+      // Swipe support (anywhere)
+      let startX = 0, startY = 0, tracking = false;
 
       document.body.addEventListener("touchstart", (e) => {
         if (!e.touches || e.touches.length !== 1) return;
@@ -353,8 +421,8 @@
         const dy = touch.clientY - startY;
 
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) {
-          if (dx < 0) next();
-          else prev();
+          if (dx < 0) nextImageOrGarden();
+          else prevImageOrGarden();
           startAutoplay();
         }
       }, { passive: true });
