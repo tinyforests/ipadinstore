@@ -1,4 +1,4 @@
-<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (RIGHT PANEL SCROLL FIX: grid + swipe guard) -->
+<!-- instore-ipad.html  |  Gardener & Son — In-Store iPad Display / Sales Tool (KIOSK SLIDESHOW MODE, CLEAN — no right panel scrolling) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,6 +39,7 @@
 
     html, body { height: 100%; }
     body { overscroll-behavior: none; overflow: hidden; }
+
     .safe { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
     .no-select { -webkit-user-select: none; user-select: none; }
     :focus-visible { outline: 2px solid rgba(61, 69, 53, 0.55); outline-offset: 3px; }
@@ -48,9 +49,6 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* iPad scroll feel */
-    #rightScroll { -webkit-overflow-scrolling: touch; }
-
     @media (prefers-reduced-motion: reduce) { .fade { transition: none !important; } }
   </style>
 </head>
@@ -59,7 +57,7 @@
   <div class="h-[100dvh] w-full flex flex-col pt-1">
     <main class="flex-1">
       <div class="max-w-7xl mx-auto px-6 lg:px-8 py-5 h-full">
-        <section id="view-gardens" class="grid lg:grid-cols-12 gap-8 h-full">
+        <section class="grid lg:grid-cols-12 gap-8 h-full">
           <!-- Left -->
           <div class="lg:col-span-8 flex flex-col min-h-0">
             <div class="border border-gardener-green/10 bg-gardener-green/5 overflow-hidden flex flex-col">
@@ -88,20 +86,14 @@
 
           <!-- Right -->
           <div class="lg:col-span-4 flex flex-col min-h-0">
-            <!-- FIX: use grid rows so the middle area DEFINITELY gets a bounded height -->
-            <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 min-h-0 grid grid-rows-[auto,1fr,auto]">
-              <!-- header -->
+            <div class="border border-gardener-green/10 bg-gardener-green/5 p-7 flex-1 flex flex-col min-h-0">
               <div>
                 <div class="text-xs uppercase tracking-[0.18em] opacity-60">What this garden delivers</div>
                 <h2 class="font-serif text-4xl leading-[1.02] mt-2">Beauty under real conditions.</h2>
               </div>
 
-              <!-- scroll area (row 2) -->
-              <div id="rightScroll" class="mt-6 min-h-0 overflow-y-auto pr-2 hide-scrollbar space-y-6 text-base leading-relaxed">
-                <p id="salesLine" class="text-lg">
-                  A wild cottage garden in pale tones—pastels, whites and silvers—held by clear structure and a soft silver screen.
-                  Basalt steppers guide a sensory walk through scent, movement and seasonal bloom, while layered planting quietly builds habitat and everyday calm.
-                </p>
+              <div class="mt-6 space-y-6 text-base leading-relaxed">
+                <p id="salesLine" class="text-lg"></p>
 
                 <div class="grid grid-cols-1 gap-5">
                   <div class="border-l-2 border-gardener-green/20 pl-5">
@@ -121,8 +113,7 @@
                 </div>
               </div>
 
-              <!-- footer actions (row 3) -->
-              <div class="pt-6 border-t border-gardener-green/10">
+              <div class="mt-auto pt-6 border-t border-gardener-green/10">
                 <div class="flex items-center justify-between gap-4 flex-wrap">
                   <a href="mailto:hello@gardenerandson.com.au?subject=Garden%20consultation%20request"
                      class="text-sm border border-gardener-green px-6 py-3 hover:bg-gardener-green hover:text-nostalgic-beige transition-colors">
@@ -142,6 +133,9 @@
   </div>
 
   <script>
+    // =========================
+    // DATA — Replace image paths
+    // =========================
     const GARDENS = [
       {
         title: "Wild Cottage Garden",
@@ -154,7 +148,7 @@
           "img/garden-01-05.jpg"
         ],
         salesLine:
-          "A wild cottage garden in pale tones—pastels, whites and silvers—held by clear structure and a soft silver screen. Basalt steppers guide a sensory walk through scent, movement and seasonal bloom, while layered planting quietly builds habitat and everyday calm.",
+          "Soft pastels, whites and silvers, held by clear structure and a gentle silver screen. Basalt steppers guide a sensory walk through scent, movement and seasonal bloom—while layered planting quietly builds habitat and everyday calm.",
         designedFor: [
           "A guided garden walk (sensory + seasonal)",
           "Nectar-loving birds and pollinators",
@@ -165,7 +159,7 @@
           "Soft silver screen: Elaeagnus (Silverberry)",
           "Meadow layer: Poa + Calamagrostis ‘Karl Foerster’ + Festuca glauca",
           "Long-bloom colour: catmint + Salvia nemorosa + Buddleja",
-          "Airy seasonal lift: Verbena bonariensis (pollinator magnet)",
+          "Airy seasonal lift: Verbena bonariensis",
           "Texture + ground: Stachys, Sedum, Pratia; native Enchylaena"
         ],
         resultsOverTime: [
@@ -221,11 +215,17 @@
       }
     ];
 
+    // =========================
+    // STATE
+    // =========================
     let currentGardenIndex = 0;
     let currentImageIndex = 0;
     let timer = null;
     let autoplay = true;
 
+    // =========================
+    // ELEMENTS
+    // =========================
     const imagePanel = document.getElementById("imagePanel");
     const gardenTitle = document.getElementById("gardenTitle");
     const gardenSubtitle = document.getElementById("gardenSubtitle");
@@ -237,8 +237,10 @@
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const btnScript = document.getElementById("btn-script");
-    const rightScroll = document.getElementById("rightScroll");
 
+    // =========================
+    // HELPERS
+    // =========================
     function setList(el, items) {
       el.innerHTML = "";
       items.forEach((t) => {
@@ -299,8 +301,6 @@
       setList(resultsOverTime, g.resultsOverTime);
 
       setActiveThumb(gIndex);
-
-      if (rightScroll) rightScroll.scrollTop = 0;
     }
 
     function nextImageOrGarden() {
@@ -335,6 +335,9 @@
       timer = setInterval(nextImageOrGarden, 5000);
     }
 
+    // =========================
+    // INIT
+    // =========================
     document.addEventListener("DOMContentLoaded", () => {
       // Build thumbs
       GARDENS.forEach((g, i) => {
@@ -350,9 +353,11 @@
       render(0, 0, true);
       startAutoplay();
 
+      // Buttons
       prevBtn.addEventListener("click", () => { prevImageOrGarden(); startAutoplay(); });
       nextBtn.addEventListener("click", () => { nextImageOrGarden(); startAutoplay(); });
 
+      // Quick pitch toggle
       let pitchMode = false;
       btnScript.addEventListener("click", () => {
         pitchMode = !pitchMode;
@@ -363,23 +368,21 @@
           return;
         }
         salesLine.textContent =
-          "“This is a wild cottage garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. The planting supports birds and pollinators, while the garden becomes calmer and richer each season.”";
+          "“This is a Gardener & Son garden — designed to thrive in real conditions. It’s layered, tuned to the site, and built to mature into depth. Over time it becomes calmer, richer, and more alive.”";
         btnScript.textContent = "Back";
-        if (rightScroll) rightScroll.scrollTop = 0;
       });
 
-      // Swipe support (BUT: don't hijack scroll gestures inside the right panel)
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
-      let ignoreSwipe = false;
+      // Keyboard support
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") { nextImageOrGarden(); startAutoplay(); }
+        if (e.key === "ArrowLeft") { prevImageOrGarden(); startAutoplay(); }
+      });
+
+      // Swipe support (anywhere)
+      let startX = 0, startY = 0, tracking = false;
 
       document.body.addEventListener("touchstart", (e) => {
         if (!e.touches || e.touches.length !== 1) return;
-
-        // If the gesture starts inside the scroll panel, let it scroll.
-        ignoreSwipe = !!(e.target && e.target.closest && e.target.closest("#rightScroll"));
-
         tracking = true;
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
@@ -388,8 +391,6 @@
       document.body.addEventListener("touchend", (e) => {
         if (!tracking) return;
         tracking = false;
-
-        if (ignoreSwipe) { ignoreSwipe = false; return; }
 
         const touch = e.changedTouches && e.changedTouches[0];
         if (!touch) return;
